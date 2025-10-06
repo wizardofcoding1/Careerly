@@ -5,7 +5,6 @@ import ResumeComponent from "./HomePageComponent/ResumeComponent";
 import QuizSection from "./HomePageComponent/QuizSection";
 import Footer from "../../Components/Layout/Footer";
 import AIChatWidget from "../../Components/AI/AIChatWidget";
-import ProtectedRoute from "../../Components/Authenticate/ProtectedRoute";
 
 export default function Home() {
     return (
@@ -18,9 +17,7 @@ export default function Home() {
                 <QuizSection />
             </div>
             <Footer />
-            <ProtectedRoute>
-                <AIChatWidget />
-            </ProtectedRoute>
+            <AIChatWidget />
         </div>
     );
 }
