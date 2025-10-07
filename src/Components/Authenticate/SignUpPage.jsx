@@ -15,7 +15,7 @@ export default function SignUpPage() {
   useEffect(() => {
     if (user) {
       // send user info to backend
-      fetch("/api/users/save-user", {
+      fetch("https://careerly-1.onrender.com/api/users/save-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

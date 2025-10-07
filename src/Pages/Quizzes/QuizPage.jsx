@@ -15,7 +15,7 @@ export default function QuizPage() {
   useEffect(() => {
     const generateQuiz = async () => {
       try {
-        const { data } = await axios.post("/api/generate-quiz", {
+        const { data } = await axios.post("https://careerly-1.onrender.com/api/generate-quiz", {
           level,
           topic,
           numQuestions,

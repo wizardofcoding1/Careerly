@@ -25,7 +25,7 @@ export default function AIChatWidget() {
 
         // Create new chat if none exists
         if (!id) {
-          const newChatRes = await axios.post("/api/chat/new");
+          const newChatRes = await axios.post("https://careerly-1.onrender.com/api/chat/new");
           id = newChatRes.data._id;
           localStorage.setItem("chatId", id);
         }
@@ -33,7 +33,7 @@ export default function AIChatWidget() {
         setChatId(id);
 
         // Fetch previous messages if any
-        const chatRes = await axios.get(`/api/chat/${id}`);
+        const chatRes = await axios.get(`https://careerly-1.onrender.com/api/chat/${id}`);
         setMessages(
           chatRes.data.messages.map((m) => ({
             sender: m.role === "user" ? "user" : "ai",
@@ -66,7 +66,7 @@ export default function AIChatWidget() {
     try {
       // Send message to backend
       const response = await axios.post(
-        `/api/chat/${chatId}/message`,
+        `https://careerly-1.onrender.com/api/chat/${chatId}/message`,
         { role: "user", content: messageContent }
       );
 

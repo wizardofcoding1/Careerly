@@ -33,7 +33,7 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
-      const url = "/api/email/contact";
+      const url = "https://careerly-1.onrender.com/api/email/contact";
       const response = await axios.post(url, formData);
       console.log("Form Submitted:", response.data);
       setFormData({ firstName: "", lastName: "", email: "", phone: "", description: "" });

@@ -13,17 +13,14 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": {
-        target: "https://careerly-1.onrender.com", // hosted backend
+      '/api': {
+        target: 'http://localhost:5000',
         changeOrigin: true,
-        secure: true, // since it's HTTPS
+        secure: false,
       },
+    },   
+    hmr: {
+      host: "localhost",
     },
-    // Optional: remove host config to fix HMR issues
-    // hmr: { host: "localhost" },
   },
-  build: {
-    outDir: "dist", // default output folder
-  },
-  base: "/", // ensures proper routing for React Router
 });

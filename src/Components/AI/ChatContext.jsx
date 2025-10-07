@@ -21,7 +21,7 @@ export function ChatProvider({ children }) {
   // Load all chats
   const fetchChats = async () => {
   try {
-    const res = await axios.get("/api/chat");
+    const res = await axios.get("https://careerly-1.onrender.com/api/chat");
     if (Array.isArray(res.data)) {
       setChats(res.data);
       if (!currentChat && res.data.length > 0) {
@@ -43,7 +43,7 @@ export function ChatProvider({ children }) {
 const selectChat = async (chat) => {
   try {
     // Fetch the latest chat data from the server
-    const response = await axios.get(`/api/chat/${chat._id}`);
+    const response = await axios.get(`https://careerly-1.onrender.com/api/chat/${chat._id}`);
     const freshChat = response.data;
     
     // Update current chat with fresh data
@@ -73,7 +73,7 @@ const selectChat = async (chat) => {
     if (!currentChat) return;
     setMessages((prev) => [...prev, { sender: role, text: content }]);
     try {
-      const res = await axios.post(`/api/chat/${currentChat._id}/message`, {
+      const res = await axios.post(`https://careerly-1.onrender.com/api/chat/${currentChat._id}/message`, {
         role,
         content,
       });
@@ -92,7 +92,7 @@ const selectChat = async (chat) => {
   // Create new chat
   const createChat = async () => {
     try {
-      const res = await axios.post("/api/chat/new");
+      const res = await axios.post("https://careerly-1.onrender.com/api/chat/new");
       setChats((prev) => [res.data, ...prev]);
       setCurrentChat(res.data);
       setMessages([]);
@@ -104,7 +104,7 @@ const selectChat = async (chat) => {
   // Rename chat
   const renameChat = async (chatId, title) => {
     try {
-      const res = await axios.patch(`/api/chat/${chatId}/rename`, { title });
+      const res = await axios.patch(`https://careerly-1.onrender.com/api/chat/${chatId}/rename`, { title });
       setChats((prev) => prev.map((c) => (c._id === chatId ? res.data : c)));
       if (currentChat?._id === chatId) setCurrentChat(res.data);
       
@@ -118,7 +118,7 @@ const selectChat = async (chat) => {
   // Delete chat
   const deleteChat = async (chatId) => {
   try {
-    await axios.delete(`/api/chat/${chatId}`); // your backend delete call
+    await axios.delete(`https://careerly-1.onrender.com/api/chat/${chatId}`); // your backend delete call
 
     // Remove from local state
     setChats((prevChats) => prevChats.filter((chat) => chat._id !== chatId));

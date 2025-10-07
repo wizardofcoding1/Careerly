@@ -10,7 +10,7 @@ export default function VideoCard({ video }) {
   // ✅ Check if this video is already saved
   useEffect(() => {
     if (!user) return;
-    fetch(`/api/videos/is-saved?videoId=${encodeURIComponent(video.id)}&clerkId=${user.id}`)
+    fetch(`https://careerly-1.onrender.com/api/videos/is-saved?videoId=${encodeURIComponent(video.id)}&clerkId=${user.id}`)
       .then((res) => res.json())
       .then((data) => setSaved(Boolean(data.saved)))
       .catch(() => {});
@@ -23,7 +23,7 @@ export default function VideoCard({ video }) {
     try {
       if (!saved) {
         // ✅ Save video
-        const res = await fetch("/api/videos/save", {
+        const res = await fetch("https://careerly-1.onrender.com/api/videos/save", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -38,7 +38,7 @@ export default function VideoCard({ video }) {
         setSaved(true);
       } else {
         // ✅ Unsave video
-        const res = await fetch("/api/videos/delete", {
+        const res = await fetch("https://careerly-1.onrender.com/api/videos/delete", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ clerkId: user.id, videoId: video.id }),

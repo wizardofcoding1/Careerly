@@ -20,7 +20,7 @@ export default function YTVideo() {
     if (!query) return;
 
     setLoading(true);
-    fetch(`/api/youtube/search?query=${encodeURIComponent(query)}`)
+    fetch(`https://careerly-1.onrender.com/api/youtube/search?query=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((data) => {
         setVideos(data.videos || []);

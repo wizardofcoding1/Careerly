@@ -17,7 +17,7 @@ export default function VideosSection() {
   useEffect(() => {
     if (!user) return;
 
-    fetch(`/api/videos/all?clerkId=${user.id}`)
+    fetch(`https://careerly-1.onrender.com/api/videos/all?clerkId=${user.id}`)
       .then((res) => res.json())
       .then((data) => {
         setVideos(data || []); // backend returns array of saved videos
@@ -40,7 +40,7 @@ export default function VideosSection() {
 
     // Sync with backend
     try {
-      await fetch(`/api/videos/delete`, {
+      await fetch(`https://careerly-1.onrender.com/api/videos/delete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clerkId: user.id, videoId }),

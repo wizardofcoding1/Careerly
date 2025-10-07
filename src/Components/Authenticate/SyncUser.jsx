@@ -8,7 +8,7 @@ export default function SyncUser() {
     if (user) {
       // console.log("Syncing Clerk user → backend", user);
 
-      fetch("/api/users/save-user", {
+      fetch("https://careerly-1.onrender.com/api/users/save-user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
