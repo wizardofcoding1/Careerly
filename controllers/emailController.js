@@ -62,6 +62,15 @@ const contactForm = async (req, res) => {
       },
     });
 
+     // Verify transporter connection
+    transport.verify((err, success) => {
+      if (err) {
+        console.error("Transporter verification error occurred");
+      } else {
+        console.log("✅ Transporter verified successfully for contact form");
+      }
+    });
+
     // Format the message
     const messageText = `
 Contact Form Submission:
