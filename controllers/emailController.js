@@ -47,9 +47,11 @@ const sendEmail = async (req, res) => {
 // Handle contact form submissions
 const contactForm = async (req, res) => {
   try {
+    // Removed console log with request body data
     const { firstName, lastName, email, phone, description } = req.body;
 
     if (!firstName || !lastName || !email || !phone || !description) {
+      // Removed console log with field data
       return res.status(400).json({ error: "Please fill all required fields" });
     }
 
@@ -60,6 +62,15 @@ const contactForm = async (req, res) => {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+    });
+
+    // Verify transporter connection
+    transport.verify((err, success) => {
+      if (err) {
+        console.error("Transporter verification error occurred");
+      } else {
+        console.log("✅ Transporter verified successfully for contact form");
+      }
     });
 
     // Format the message
@@ -82,15 +93,18 @@ Submitted on: ${new Date().toLocaleString()}
       text: messageText,
     };
 
+    // Removed console log with email options
+
     // Send email
-    await transport.sendMail(mailOptions);
+    const info = await transport.sendMail(mailOptions);
+    console.log("✅ Email sent successfully");
 
     res.status(200).json({
       success: true,
       message: "✅ Your message has been sent successfully!",
     });
   } catch (error) {
-    console.error("Contact Form Error:", error);
+    console.error("Contact Form Error occurred");
     res.status(500).json({ error: "Failed to send your message" });
   }
 };
