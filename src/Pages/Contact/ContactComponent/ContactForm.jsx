@@ -35,12 +35,12 @@ export default function ContactForm() {
     try {
       const url = "https://careerly-1.onrender.com/api/email/contact";
       const response = await axios.post(url, formData);
-      console.log("Form Submitted:", response.data);
+      // console.log("Form Submitted:", response.data);
       setFormData({ firstName: "", lastName: "", email: "", phone: "", description: "" });
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 5000);
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error submitting form:", error.response ? error.response.data : error.message);
       setErrorMessage("Failed to send your message. Please try again later.");
       setShowError(true);
       setTimeout(() => setShowError(false), 5000);
