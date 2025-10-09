@@ -32,6 +32,9 @@ function App() {
         <SyncUser />  
         <ScrollToTop />
         <Routes>
+          <Route path="*" element={<Navigate to="/" replace />} />
+
+
           {/* Public Route */}
           <Route path="/" element={<Home />} />
 
