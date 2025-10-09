@@ -33,8 +33,26 @@ export default function ContactForm() {
     setIsSubmitting(true);
     
     try {
+      // Using the correct API endpoint with full URL
       const url = "https://careerly-1.onrender.com/api/email/contact";
-      const response = await axios.post(url, formData);
+
+      // const response = await axios.post(url, formData);
+
+      
+      // Log the form data being sent
+      console.log("Sending form data:", formData);
+      
+      // Add headers to the request
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        withCredentials: false
+      };
+      
+      const response = await axios.post(url, JSON.stringify(formData), config);
+
       // console.log("Form Submitted:", response.data);
       setFormData({ firstName: "", lastName: "", email: "", phone: "", description: "" });
       setShowSuccess(true);

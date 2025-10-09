@@ -12,20 +12,21 @@ export default function MinimalisticViewer() {
 
   const downloadFile = async (fileUrl, fileName) => {
     try {
-      // Use a direct approach for downloading
-      window.open(fileUrl, '_blank');
-      
-      // Alternative approach if the above doesn't work
-      // const a = document.createElement("a");
-      // a.href = fileUrl;
-      // a.target = "_blank";
-      // a.download = fileName || fileUrl.split("/").pop();
-      // document.body.appendChild(a);
-      // a.click();
-      // document.body.removeChild(a);
+      const response = await fetch(fileUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error("Download failed:", err);
-      alert("Failed to download the file. Please try again or check your connection.");
+      alert("Failed to download the file.");
     }
   };
 
