@@ -1,7 +1,6 @@
 // controllers/emailController.js
 const nodemailer = require("nodemailer");
 
-// Send a custom email
 const sendEmail = async (req, res) => {
   try {
     const { to, message } = req.body;
@@ -10,23 +9,19 @@ const sendEmail = async (req, res) => {
       return res.status(400).json({ error: "Please provide email & message" });
     }
 
-    // Create transporter with TLS fix for Render
+    // Create transporter
     const transport = nodemailer.createTransport({
-      host:"smtp.gmail.com",
-      port: 465,
-      secure: true,
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // Use Gmail App Password
+        pass: process.env.EMAIL_PASS,
       },
-      
     });
 
-    // Verify transporter
     transport.verify((err, success) => {
-      if (err) console.error("❌ Transporter verification failed:", err);
-      else console.log("✅ Transporter ready to send emails");
-    });
+  if (err) console.log("Transporter Error:", err);
+  else console.log("✅ Transporter ready to send emails");
+});
 
     // Mail options
     const mailOptions = {
@@ -37,17 +32,12 @@ const sendEmail = async (req, res) => {
     };
 
     // Send email
-    try {
-      await transport.sendMail(mailOptions);
-      console.log("✅ Email sent successfully");
-      res.status(200).json({
-        success: true,
-        message: "✅ Email Sent Successfully!",
-      });
-    } catch (err) {
-      console.error("❌ Error sending email:", err);
-      res.status(500).json({ error: "Failed to send email" });
-    }
+    await transport.sendMail(mailOptions);
+
+    res.status(200).json({
+      success: true,
+      message: "✅ Email Sent Successfully!",
+    });
   } catch (error) {
     console.error("Email Error:", error);
     res.status(500).json({ error: "Failed to send email" });
@@ -59,31 +49,16 @@ const contactForm = async (req, res) => {
   try {
     const { firstName, lastName, email, phone, description } = req.body;
 
-    // Log the request body for debugging
-    console.log("Contact form request body:", req.body);
-
     if (!firstName || !lastName || !email || !phone || !description) {
       return res.status(400).json({ error: "Please fill all required fields" });
     }
 
-    // Check if environment variables are set
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.error("❌ Missing email configuration environment variables");
-      return res.status(500).json({ error: "Server email configuration error" });
-    }
-
-    // Create transporter with TLS fix and more robust configuration
+    // Create transporter
     const transport = nodemailer.createTransport({
       service: "gmail",
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // Gmail App Password
-      },
-      tls: {
-        rejectUnauthorized: false,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
@@ -99,28 +74,23 @@ Message: ${description}
 Submitted on: ${new Date().toLocaleString()}
 `;
 
-    // Mail options - send to yourself
+    // Mail options - send to your email
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER, // Send to yourself
       subject: "New Contact Form Submission",
       text: messageText,
     };
 
-    // Send email with better error handling
-    try {
-      const info = await transport.sendMail(mailOptions);
-      console.log("✅ Contact form email sent successfully:", info.messageId);
-      res.status(200).json({
-        success: true,
-        message: "✅ Your message has been sent successfully!",
-      });
-    } catch (err) {
-      console.error("❌ Error sending contact form email:", err);
-      res.status(500).json({ error: "Failed to send your message" });
-    }
+    // Send email
+    await transport.sendMail(mailOptions);
+
+    res.status(200).json({
+      success: true,
+      message: "✅ Your message has been sent successfully!",
+    });
   } catch (error) {
-    console.error("Contact Form Error occurred:", error);
+    console.error("Contact Form Error:", error);
     res.status(500).json({ error: "Failed to send your message" });
   }
 };
