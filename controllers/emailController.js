@@ -59,13 +59,25 @@ const contactForm = async (req, res) => {
   try {
     const { firstName, lastName, email, phone, description } = req.body;
 
+    // Log the request body for debugging
+    console.log("Contact form request body:", req.body);
+
     if (!firstName || !lastName || !email || !phone || !description) {
       return res.status(400).json({ error: "Please fill all required fields" });
     }
 
-    // Create transporter with TLS fix
+    // Check if environment variables are set
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("❌ Missing email configuration environment variables");
+      return res.status(500).json({ error: "Server email configuration error" });
+    }
+
+    // Create transporter with TLS fix and more robust configuration
     const transport = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS, // Gmail App Password
@@ -73,12 +85,6 @@ const contactForm = async (req, res) => {
       tls: {
         rejectUnauthorized: false,
       },
-    });
-
-    // Verify transporter
-    transport.verify((err, success) => {
-      if (err) console.error("❌ Transporter verification error occurred:", err);
-      else console.log("✅ Transporter verified successfully for contact form");
     });
 
     // Format the message
@@ -101,10 +107,10 @@ Submitted on: ${new Date().toLocaleString()}
       text: messageText,
     };
 
-    // Send email
+    // Send email with better error handling
     try {
-      await transport.sendMail(mailOptions);
-      console.log("✅ Contact form email sent successfully");
+      const info = await transport.sendMail(mailOptions);
+      console.log("✅ Contact form email sent successfully:", info.messageId);
       res.status(200).json({
         success: true,
         message: "✅ Your message has been sent successfully!",
