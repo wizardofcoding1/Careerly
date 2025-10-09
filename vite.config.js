@@ -2,10 +2,21 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
+import { viteStaticCopy } from "vite-plugin-static-copy"; // ✅ added
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    tailwindcss(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'public/_redirects',
+          dest: '.' // ✅ copies to root of dist/
+        }
+      ]
+    })
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "src"),
@@ -18,7 +29,7 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
-    },   
+    },
     hmr: {
       host: "localhost",
     },
